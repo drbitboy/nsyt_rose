@@ -21,10 +21,10 @@
     $('#nasa_api_key').html('Replace the NASA API DEMO_KEY with your own NASA API key obtained from <a href="https://api.nasa.gov/index.html#apply-for-an-api-key">here</a>.<hr>')
   }
 
-  var global_data;                 // Global to save weather object
+  var global_data;  // Global to save Mars weather data object
 
   //////////////////////////////////////////////////////////////////////
-  // Retrieve Mars data from NASA API
+  // Retrieve Mars weather data from NASA API as JSON stream
   // - Write data for each Sol
   // - Write JSON stream
   //////////////////////////////////////////////////////////////////////
@@ -34,10 +34,7 @@
       {
         global_data = data;           // Save object to global variable
 
-        $.each(data.sol_keys,function(i, sol_key)  // Loop over Sols
-        {
-          write_sol_data(data[sol_key], sol_key);  // Write data for Sol
-        });
+        $.each(data.sol_keys,write_sol_data); // Loop over Sols, write data
         $("#summary").append('<hr>');
 
         // Write JSON stream to #json PRE
@@ -49,7 +46,9 @@
   // Function to write data for one Sol
   //////////////////////////////////////////////////////////////////////
 
-  function write_sol_data(sol_obj, sol) {
+  function write_sol_data(i_index, sol) {
+
+    var sol_obj = global_data[sol];
 
     // Summarize per-Sol temperature data to #summary DIV
     $('#summary').append( 'On Sol <b> ' + sol + '</b>'
